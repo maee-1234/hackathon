@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -11,10 +11,121 @@ import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 
+/*
+const receiving = async (url) => {
+  const data = await getMoviesFromApi(url)
+  return data
+}
+const FixedDimensionsBasics = () => {
+    const [dat, setCount] = useState(0);
+    const [dat2, setDat] = useState(0);
+    const url = 'https://reactnative.dev/movies.json'
+    
+    const getMoviesFromApi = (url) => {
+        return fetch(url)
+          .then((response) => {
+              return response.json()})
+          .then((json) => {
+            return json;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+    useEffect(() => {
+      receiving(url).then((d) => {
+        console.log(d)
+        setCount(d)
+      })
+    }, [])
+    
+  return (
+    <View>
+        <Text>
+     {JSON.stringify(dat)}
+     </Text>
+    </View>
+  );
+};
+*/
+
+
+/*const usercheck = (emails, pass) => {
+  const url = 'http://192.168.0.5:8000/login/'
+  
+  const getMoviesFromApi = (url) => {
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: emails,
+        password: pass
+      })
+    })
+      .then((response) => {
+          return response.json()})
+      .then((json) => {
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+    const receiving = async (url) => {
+      const data = await getMoviesFromApi(url)
+      return data
+    }
+    
+    useEffect(() => {
+      receiving(url).then((d) => {
+        console.log(d)
+        return d
+      })
+    }, [])
+    
+};*/
+
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const [loginsuc, setloginsuc] = useState({value: ''})
+  const [tok, setTok] = useState({tok:''})
+  const url = 'http://192.168.0.5:8000/login/'
+  const url2 = 'http://192.168.0.5:8000/user/'
+  console.log("a")
+  //const [result, setresult] = useState({ result: '' })
+  const getMoviesFromApi = (url) => {
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value
+      })
+    })
+      .then((response) => {
+          return response.json()})
+      .then((json) => {
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+    const receiving = async (url) => {
+      const data = await getMoviesFromApi(url)
+      return data
+    }
 
+
+    
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
@@ -23,10 +134,71 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.reset({
+      receiving(url).then((d) => {
+        if(d.success=="false") {
+          setloginsuc({value: "로그인유저정보가 없습니다"})
+        } else if (d.success=="true")
+        {
+          console.log(d)
+          setTok({tok: d.token[0].token})
+          console.log(tok.tok)
+        } else {
+          console.log('a')
+        }
+
+        
+      }).then(() => {
+        const getMoviesFromApi2 = (url) => {
+          return fetch(url, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            token: tok.tok
+          })
+        })
+          .then((response) => {
+              
+              return response.json()})
+          .then((json) => {
+            console.log(json)
+            return json;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+    
+      const receiving2 = async (url) => {
+        const data2 = await getMoviesFromApi2(url)
+        return data2
+      }
+    
+    
+      receiving2(url2).then((k) => {
+        console.log(k)
+        if(k.success=="false") {
+          console.log('fuck')
+        } else if (k.success=="true")
+        {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home',  params: {prop: k.nickname[0].nickname}}],
+          })
+        } else {
+          
+            console.log('this is also fuck')
+        }
+      })
+      })
+
+
+    /*navigation.reset({
       index: 0,
       routes: [{ name: 'Main' }],
-    })
+    })*/
   }
 
   return (
@@ -64,6 +236,9 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.link}> 회원가입</Text>
         </TouchableOpacity>
       </View>
+      <Text>
+        {loginsuc.value}
+      </Text>
     </Background>
   )
 }

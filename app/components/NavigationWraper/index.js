@@ -7,6 +7,10 @@ import FancyBottomTab from "../FancyBottomTab";
 import TweetBubble from "../TweetBubble";
 
 class NavigationWraper extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={username:''};
+  }
   _handleShowDrawer = () => this.drawer._showProfile(0);
   _handleHeaderFade = i => this.header._fadeAvatar(i);
 
@@ -18,14 +22,17 @@ class NavigationWraper extends React.Component {
 
   _changeScreen_Main = screens =>
       this.props.navigation.navigate ("Main", {screen: screens})
-
   render() {
+    const usertoken = this.props.userinfo
+    this.setState({username: usertoken})
+
+
     return (
       <FancyDrawer
         fading={this._handleHeaderFade}
         ref={ref => (this.drawer = ref)}
         navigation={this._changeScreen_Drawer}
-        profileName={"유저이름"}
+        profileName={this.state.username}
         profileUserName={"유저이메일?정도"}
       >
         <Header

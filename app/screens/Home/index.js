@@ -1,7 +1,7 @@
 import React from "react";
 
 
-
+import * as Permissions from 'expo-permissions';
 import {
   ScrollView,
   TouchableHighlight,
@@ -18,14 +18,30 @@ import NavigationWraper from "../../components/NavigationWraper";
 import Tweet from "../../components/Tweet";
 
 import CardList from "react-native-card-animated-modal";
+
+
+/*const not_true_data = {
+    message: "hello",
+    image: url
+
+}*/
+
 const now = new Date();
 const CARDS = [
   {
     image: {
       uri:
-        "https://cdn-icons-png.flaticon.com/128/739/739249.png"
+        "http://www.gamespersecond.com/media/2011/07/battlefield-3-poster.jpg"
     },
-    height: 300,
+    height: 400,
+    renderItem: ({ item, index }) => (
+      <View>
+        <Text>Customizable Content</Text>
+      </View>
+    )
+  },
+  {
+    height: 30,
     renderItem: ({ item, index }) => (
       <View>
         <Text>Customizable Content</Text>
@@ -39,9 +55,10 @@ class Home extends React.Component {
   
   
   render() {
-
+    const { prop } = this.props.route.params
     return (
       <NavigationWraper
+        userinfo={prop}
         navigation={this.props.navigation}
         selected={0}
         rightIcon={
@@ -65,7 +82,10 @@ class Home extends React.Component {
           </Text>
         }
       >
-        <CardList
+
+
+
+        <CardList style={{paddingBottom : 300}}
     listProps={{
       ListHeaderComponent: () => (
         <View style={{ padding: 16, paddingBottom: 0 }}>
@@ -108,6 +128,10 @@ class Home extends React.Component {
       </View>
     )}
   />
+
+
+
+
 
 
       </NavigationWraper>

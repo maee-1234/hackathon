@@ -24,9 +24,7 @@ import {
 
 
 import Home from "./screens/Home";
-import Search from "./screens/Search";
 import Notification from "./screens/Notification";
-import Message from "./screens/Message";
 
 import UnderConstruction from "./screens/UnderConstruction";
 import TweetButton from "./screens/TweetButton"
@@ -77,9 +75,7 @@ function Main() {
   return (
     <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Notification" component={Notification} />
-          <Stack.Screen name="Message" component={Message} />
         </Stack.Navigator>
   )
 }
@@ -105,9 +101,10 @@ export default function App() {
         }}
           > 
           <Stack.Screen name="Logins" component={Logins} />
-          <Stack.Screen name="Main" component={Main} />
           <Stack.Screen name="Drawer" component={Drawers} />
           <Stack.Screen name="Details" component={Detail} />
+          <Stack.Screen name="Main" component={Main} />
+          <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator> 
       </NavigationContainer>
   )

@@ -29,17 +29,10 @@ export default class TweetBubble extends React.Component {
             justifyContent: "center"
           }}
         >
-          {this.props.message ? (
-            <Image
-              style={{ height: 30, width: 30 }}
-              source={require("../../../assets/edit.png")}
-            />
-          ) : (
             <Image
               style={{ height: 30, width: 30 }}
               source={require("../../../assets/message.png")}
             />
-          )}
         </View>
       </TouchableOpacity>
     );

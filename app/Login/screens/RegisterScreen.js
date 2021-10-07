@@ -16,6 +16,35 @@ export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const [loginsuc, setloginsuc] = useState({value: ''})
+  const url = 'http://192.168.0.5:8000/signup/'
+  const getMoviesFromApi = (url) => {
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nickname: name.value,
+        email: email.value,
+        password: password.value
+      })
+    })
+      .then((response) => {
+          return response.json()})
+      .then((json) => {
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+    const receiving = async (url) => {
+      const data = await getMoviesFromApi(url)
+      return data
+    }
+
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
@@ -27,9 +56,18 @@ export default function RegisterScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
+
+    receiving(url).then((d) => {
+      console.log(d)
+    if (d.message =="success")
+      {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'LoginScreen' }],
+        })
+      } else {
+        setloginsuc({value: "뭔가 잘못되었습니다. 다시 시도하세요"})
+      }
     })
   }
 
@@ -80,6 +118,9 @@ export default function RegisterScreen({ navigation }) {
           <Text style={styles.link}> 로그인</Text>
         </TouchableOpacity>
       </View>
+      <Text>
+        {loginsuc.value}
+      </Text>
     </Background>
   )
 }

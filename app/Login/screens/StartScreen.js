@@ -23,6 +23,15 @@ export default function StartScreen({ navigation }) {
       >
         회원가입
       </Button>
+      <Button
+        mode="outlined"
+        onPress={() => navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        })}
+      >
+        하이패스
+      </Button>
     </Background>
   )
 }

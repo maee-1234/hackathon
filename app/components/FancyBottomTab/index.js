@@ -80,16 +80,8 @@ class FancyBottomTab extends React.Component {
           onPress={this.props.navigation.bind(this, "Home")}
         />
         <TabOption
-          icon={this.iconList[1]}
-          /*onPress={this.props.navigation.bind(this, "Search")}*/
-        />
-        <TabOption
           icon={this.iconList[2]}
-          /*onPress={this.props.navigation.bind(this, "Notification")}*/
-        />
-        <TabOption
-          icon={this.iconList[3]}
-          /*onPress={this.props.navigation.bind(this, "Message")}*/
+          onPress={this.props.navigation.bind(this, "Notification")}
         />
       </View>
     );

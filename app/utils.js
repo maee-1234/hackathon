@@ -48,7 +48,7 @@ export const drawerOptionList = [
   },
   null,
   {
-    text: "사실 없어도 됨",
+    text: "로그아웃",
     nav: "Configuration"
   },
   {

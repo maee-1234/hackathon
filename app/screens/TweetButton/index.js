@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect} from 'react';
 import { TextInput, StyleSheet, View, Text, Alert, Button } from 'react-native';
-
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+import SquarePhoto from "../../components/photo/SquarePhoto";
 export default class TweetButton extends Component {
  
   state = {
@@ -13,7 +15,7 @@ export default class TweetButton extends Component {
     this.setState({text: this.state.inputText});
   }
 
-  /*post로 바꿔야됨*/
+  
   getMoviesFromApi = (url) => {
     fetch(url, {
   method: "POST",
@@ -31,25 +33,12 @@ export default class TweetButton extends Component {
 
 
   render() {
+
+
+  
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.headerText}>TextInput 가지고 놀아보자</Text>
-        <View style={styles.bodyContainer}>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => {
-              const url = 'https://reactnative.dev/movies.json'
-              this.getMoviesFromApi(url)
-              
-              
-              
-              this.setState({inputText: text})}}
-            placeholder="아무거나 입력해주세요."
-          />
-          <Button title="제출" onPress = {this.submitBtn} />
-          <Text style = {styles.showText}>{this.state.text}</Text>
-        </View>
-      </View>
+      <Posting text={this.state.text} inputText={this.state.inputText} submitBtn={this.submitBtn}/>
     );
   }
 } 
@@ -85,3 +74,21 @@ const styles = StyleSheet.create({
     fontSize: 25,
   }
 })
+
+function Posting(props) {
+  /*const [selected, setSelected] = useState();
+  // 로딩 
+  const [loading, setLoading] = useState(false);
+  //접근 권한 허용했는지 
+  const [hasAllow , setHasAllow] = useState(false);*/
+  const requestPermisison = async () => {
+    const response = await Permissions.askAsync(Permissions.CAMERA);
+    console.log(response);
+  };
+
+  useEffect(() => {
+    requestPermisison();
+  }, []);
+
+  return(<SquarePhoto />)
+}
