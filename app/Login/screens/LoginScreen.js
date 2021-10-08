@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createContext, useReducer } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -10,6 +10,7 @@ import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+export const UserDispatch = React.createContext(null)
 
 /*
 const receiving = async (url) => {
@@ -97,8 +98,18 @@ export default function LoginScreen({ navigation }) {
   const url = 'http://192.168.0.5:8000/login/'
   const url2 = 'http://192.168.0.5:8000/user/'
   console.log("a")
+
+
+
+  useEffect(() => {
+    // POST request using fetch inside useEffect React hook
+
+    
+
+// empty dependency array means this effect will only run once (like componentDidMount in classes)
+}, []);
   //const [result, setresult] = useState({ result: '' })
-  const getMoviesFromApi = (url) => {
+  /*const getMoviesFromApi = (url) => {
     return fetch(url, {
       method: 'POST',
       headers: {
@@ -122,7 +133,7 @@ export default function LoginScreen({ navigation }) {
     const receiving = async (url) => {
       const data = await getMoviesFromApi(url)
       return data
-    }
+    }*/
 
 
     
@@ -134,7 +145,52 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-      receiving(url).then((d) => {
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        email: email.value,
+        password: password.value 
+      })
+  })
+        .then(response => response.json())
+        .then(data => {
+          if(data.success=="false") {
+          setloginsuc({value: "로그인유저정보가 없습니다"})
+        } else if (data.success=="true")
+        {
+
+        fetch(url2, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: data.token[0].token })
+      })
+            .then(response => response.json())
+            .then(data => 
+              {
+                console.log(data)
+                if(data.success=="false") {
+                  console.log('fuck')
+                } else if (data.success=="true")
+                {
+                  setTok({tok: data.nickname[0].nickname})
+                  //export const UserDispatch = React.createContext(data.nickname[0].nickname)
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Home'}],
+                  })
+                } else {
+                  
+                    console.log('this is also fuck')
+                }
+              })
+
+          //setTok({tok: data.token[0].token})
+        } else {
+          console.log('a')
+        }});
+      /*receiving(url).then((d) => {
         if(d.success=="false") {
           setloginsuc({value: "로그인유저정보가 없습니다"})
         } else if (d.success=="true")
@@ -192,7 +248,7 @@ export default function LoginScreen({ navigation }) {
             console.log('this is also fuck')
         }
       })
-      })
+      })*/
 
 
     /*navigation.reset({
@@ -202,6 +258,7 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
+    <UserDispatch.Provider value={tok.tok}>
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Logo />
@@ -240,6 +297,7 @@ export default function LoginScreen({ navigation }) {
         {loginsuc.value}
       </Text>
     </Background>
+    </UserDispatch.Provider>
   )
 }
 

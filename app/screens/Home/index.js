@@ -11,6 +11,10 @@ import {
   Image, View
 } from "react-native";
 
+
+import { UserDispatch } from '../../Login/screens/LoginScreen';
+
+
 import { width, colors } from "../../utils";
 import { homeFeed } from "../../mock";
 
@@ -50,15 +54,14 @@ const CARDS = [
   }
 ];
 
-
 class Home extends React.Component {
-  
+  static contextType = UserDispatch;
   
   render() {
-    const { prop } = this.props.route.params
+    const name = this.context;
     return (
       <NavigationWraper
-        userinfo={prop}
+        userinfo={name}
         navigation={this.props.navigation}
         selected={0}
         rightIcon={
@@ -134,8 +137,8 @@ class Home extends React.Component {
 
 
 
-      </NavigationWraper>
-    );
+      </NavigationWraper>)
+
   }
 }
 

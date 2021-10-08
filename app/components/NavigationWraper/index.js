@@ -9,7 +9,7 @@ import TweetBubble from "../TweetBubble";
 class NavigationWraper extends React.Component {
   constructor(props){
     super(props);
-    this.state={username:''};
+    this.state={username:this.props.userinfo};
   }
   _handleShowDrawer = () => this.drawer._showProfile(0);
   _handleHeaderFade = i => this.header._fadeAvatar(i);
@@ -20,11 +20,10 @@ class NavigationWraper extends React.Component {
   _changeScreen_Drawer = screens =>
       this.props.navigation.navigate ("Drawer", {screen: screens})
 
-  _changeScreen_Main = screens =>
-      this.props.navigation.navigate ("Main", {screen: screens})
+  _changeScreen_Main = (screens) =>{
+      this.props.navigation.navigate ("Main", {screen: screens})}
   render() {
-    const usertoken = this.props.userinfo
-    this.setState({username: usertoken})
+
 
 
     return (

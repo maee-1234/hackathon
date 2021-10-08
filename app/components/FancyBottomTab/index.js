@@ -23,6 +23,7 @@ const TabOption = function(props) {
 };
 
 class FancyBottomTab extends React.Component {
+  
   iconList = [
     <MaterialCommunityIcons
       name={"home-outline"}
